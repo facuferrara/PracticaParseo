@@ -34,14 +34,18 @@
     PRIM(B) = {id}
     PRIM(C) = {λ, ','}
 
-    SIG(S) = {}
-    SIG(A) = {}
-    SIG(B) = {}
-    SIG(C) = {}
+    SIG(S) = {$}
+    SIG(A) = {$}
+    SIG(B) = {]}
+    SIG(C) = {]}
     
-    PRED(A) = {$}
-    PRED(B) = {$}
-    PRED(C) = {]}
-    PRED(D) = {]}
+    PRED(A) = {}
+    PRED(B) = {}
+    PRED(C) = {}
+    PRED(D) = {}
     
 ```
+
+
+3. [4 puntos] Constrúyase el parser ASAP SLR y muéstrese el parsing para la entrada [[][]]. Palabras válidas del lenguaje {[], [[]], [][], [[][]], ... }
+
