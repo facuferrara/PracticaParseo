@@ -30,8 +30,8 @@
     C -> λ | ,idC  
 
     PRIM(S) = {[}
-    PRIM(A) = {], B}
-    PRIM(B) = {id, λ, ','}
+    PRIM(A) = {], id}
+    PRIM(B) = {id}
     PRIM(C) = {λ, ','}
 
     SIG(S) = {}
@@ -39,9 +39,9 @@
     SIG(B) = {}
     SIG(C) = {}
     
-    PRED(A) = {}
-    PRED(B) = {}
-    PRED(C) = {}
-    PRED(D) = {}
+    PRED(A) = {$}
+    PRED(B) = {$}
+    PRED(C) = {]}
+    PRED(D) = {]}
     
 ```
