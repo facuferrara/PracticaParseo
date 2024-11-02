@@ -39,10 +39,10 @@
     SIG(B) = {]}
     SIG(C) = {]}
     
-    PRED(A) = {}
-    PRED(B) = {}
-    PRED(C) = {}
-    PRED(D) = {}
+    PRED(S-> [ A) = {[}
+    PRED(A -> B ]) = {id}
+    PRED(B ->  idC) = {id}
+    PRED(C -> ,idC  ) = { ','}
     
 ```
 
