@@ -18,7 +18,9 @@
     
     
 
-2. [4 puntos] Constrúyase el parser ASDP LL(1) y muéstrese el parsing para una entrada de longitud mayor a 4. Palabras válidas del lenguaje {[], [id], [id,id], [id,id,id], ... }
+2. [4 puntos] Constrúyase el parser ASDP LL(1) y 
+   muéstrese el parsing para una entrada de longitud mayor a 4.
+    Palabras válidas del lenguaje {[], [id], [id,id], [id,id,id], ... }
 
     ```plain
     L = {[], [id], [id,id], [id,id,id], ... }
@@ -63,19 +65,62 @@
     Tambien podes emparejar sacando del tope de la pila y
     correr el tope a la entrada.
     
-    | Pila  |   Cadena       | Regala o Acción       |
-    | --    |   --           | --                    |
-    | $S    |   [id,id]      |  S-> [ A              |
-    | [ A   |   [id,id]      |  Emparejar([)         |
-    | A     |   id,id]       |  A -> B ]             |
-    | ]B    |   id,id]       |  B ->  idC            |
-    | ]Cid  |   id,id]       |  Emparejar(id)        |
-    | ]C    |   ,]           |  Emparejar(,)         |
-    | ]C    |   ]            |   C -> λ              |
-    | ]     |   ]            |   Emparejar(])        |
-    | $     |   $            |   Accept              |
+    | Pila   |   Cadena        | Regala o Acción       |
+    | --     |   --            | --                    |
+    | $S     |   [id,id]$      |  S-> [ A              |
+    | $[A    |   [id,id]$      |  Emparejar([)         |
+    | $A     |   id,id]$       |  A -> B ]             |
+    | $]B    |   id,id]$       |  B ->  idC            |
+    | $]Cid  |   id,id]$       |  Emparejar(id)        |
+    | $]C    |   ,id]$         |  Emparejar(,)         |
+    | $]C    |   id]$          |   C -> λ              |
+    | $]     |   id]$          |   Emparejar(id)       |
+    | $]     |   ]$            |   Emparejar(])        |
+    | $      |   $             |   Accept              |
 
 
 
-3. [4 puntos] Constrúyase el parser ASAP SLR y muéstrese el parsing para la entrada [[][]]. Palabras válidas del lenguaje {[], [[]], [][], [[][]], ... }
+3. [4 puntos] Constrúyase el parser ASAP SLR y muéstrese 
+   el parsing para la entrada [[][]]. 
 
+   Palabras válidas del lenguaje {[], [[]], [][], [[][]], ... }
+
+    Gramatica:
+
+    S -> [] | [S] | SS
+    
+    S' -> S
+
+    R1 S-> []
+    R2 S -> [S]
+    R3 S -> SS
+
+   ### Tabla de Parsing para la Entrada `[[][]]`
+
+| Pila               | Entrada   | Acción                         |
+|--------------------|-----------|--------------------------------|
+| `[0]`              | `[[][]]$` | **Shift `[`** (desplazar a 1) |
+| `[0, [1]`          | `[][]]$`  | **Shift `[`** (desplazar a 1) |
+| `[0, [1, [1]`      | `][]]$`   | **Shift `]`** (desplazar a 2) |
+| `[0, [1, [1, ]2]`  | `[]]$`    | **Reduce `S → []`** <br> (pop `[1, ]2`, push `S3`) |
+| `[0, [1, S3]`      | `[]]$`    | **Shift `]`** (desplazar a 4) |
+| `[0, S5]`          | `[]$`     | **Reduce `S → [S]`** <br> (pop `[1, S3, ]4`, push `S3`) |
+| `[0, S3]`          | `[]$`     | **Shift `[`** (desplazar a 1) |
+| `[0, S3, [1]`      | `]$`      | **Shift `]`** (desplazar a 2) |
+| `[0, S3, [1, ]2]`  | `$`       | **Reduce `S → []`** <br> (pop `[1, ]2`, push `S3`) |
+| `[0, S3, S3]`      | `$`       | **Reduce `S → SS`** <br> (pop `S3, S3`, push `S5`) |
+| `[0, S5]`          | `$`       | **Aceptar** (accept)          |
+
+### Explicación Paso a Paso
+
+1. En el primer paso, vamos desplazando corchetes abiertos `[` y cerrados `]`, aplicando **shift** en cada símbolo hasta poder aplicar una reducción.
+   
+2. Las reducciones se aplican cada vez que encontramos una subcadena completa que coincide con una de las producciones:
+   - **`S → []`**: cuando encontramos un par `[]`.
+   - **`S → [S]`**: cuando encontramos una expresión `S` dentro de corchetes `[` y `]`.
+   - **`S → SS`**: cuando tenemos dos expresiones `S` una tras otra.
+
+3. Finalmente, después de aplicar todas las reducciones, llegamos al estado de **aceptación** (`accept`), lo cual indica que la cadena de entrada `[[][]]` es válida.
+
+Esta tabla completa muestra el proceso del parser SLR para analizar la entrada `[[][]]` hasta su aceptación final.
+     
