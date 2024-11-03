@@ -60,15 +60,20 @@
     
     Se hace $S siempre $ seguido del axioma en este caso S
     Chequeo en el puntero de la pila si tengo esa entrada en la producción.
-    Tambien podes emparejar sacando del tope de la pila y correr el tope a la entrada.
+    Tambien podes emparejar sacando del tope de la pila y
+    correr el tope a la entrada.
     
-    | Pila  |   Entrada     | Regala o Acción       |
-    | --    |   --          | --                    |
-    | $S    |               |  S-> [ A              |
-    |      |                |                       |
-    |      |                |                       |
-    |      |                |                       |
-
+    | Pila  |   Cadena       | Regala o Acción       |
+    | --    |   --           | --                    |
+    | $S    |   [id,id]      |  S-> [ A              |
+    | [ A   |   [id,id]      |  Emparejar([)         |
+    | A     |   id,id]       |  A -> B ]             |
+    | ]B    |   id,id]       |  B ->  idC            |
+    | ]Cid  |   id,id]       |  Emparejar(id)        |
+    | ]C    |   ,]           |  Emparejar(,)         |
+    | ]C    |   ]            |   C -> λ              |
+    | ]     |   ]            |   Emparejar(])        |
+    | $     |   $            |   Accept              |
 
 
 
