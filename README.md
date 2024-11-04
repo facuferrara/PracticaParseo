@@ -94,33 +94,54 @@
     R1 S-> []
     R2 S -> [S]
     R3 S -> SS
-
-   ### Tabla de Parsing para la Entrada `[[][]]`
-
-| Pila               | Entrada   | Acción                         |
-|--------------------|-----------|--------------------------------|
-| `[0]`              | `[[][]]$` | **Shift `[`** (desplazar a 1) |
-| `[0, [1]`          | `[][]]$`  | **Shift `[`** (desplazar a 1) |
-| `[0, [1, [1]`      | `][]]$`   | **Shift `]`** (desplazar a 2) |
-| `[0, [1, [1, ]2]`  | `[]]$`    | **Reduce `S → []`** <br> (pop `[1, ]2`, push `S3`) |
-| `[0, [1, S3]`      | `[]]$`    | **Shift `]`** (desplazar a 4) |
-| `[0, S5]`          | `[]$`     | **Reduce `S → [S]`** <br> (pop `[1, S3, ]4`, push `S3`) |
-| `[0, S3]`          | `[]$`     | **Shift `[`** (desplazar a 1) |
-| `[0, S3, [1]`      | `]$`      | **Shift `]`** (desplazar a 2) |
-| `[0, S3, [1, ]2]`  | `$`       | **Reduce `S → []`** <br> (pop `[1, ]2`, push `S3`) |
-| `[0, S3, S3]`      | `$`       | **Reduce `S → SS`** <br> (pop `S3, S3`, push `S5`) |
-| `[0, S5]`          | `$`       | **Aceptar** (accept)          |
-
-### Explicación Paso a Paso
-
-1. En el primer paso, vamos desplazando corchetes abiertos `[` y cerrados `]`, aplicando **shift** en cada símbolo hasta poder aplicar una reducción.
    
-2. Las reducciones se aplican cada vez que encontramos una subcadena completa que coincide con una de las producciones:
-   - **`S → []`**: cuando encontramos un par `[]`.
-   - **`S → [S]`**: cuando encontramos una expresión `S` dentro de corchetes `[` y `]`.
-   - **`S → SS`**: cuando tenemos dos expresiones `S` una tras otra.
+   Tabla SLR:
 
-3. Finalmente, después de aplicar todas las reducciones, llegamos al estado de **aceptación** (`accept`), lo cual indica que la cadena de entrada `[[][]]` es válida.
+   |  Estado	| [   |	]     |  $  |	S  |
+   |--------   |-----|------  |-----|-----|
+   |  0        |D(1)	|   	   |     |	2  |
+   |  1        |D(1)	|D(3)	   |     |	2  |
+   |  2		   |     |R(2)	   |R(2)	|  3  |
+   |  3		   |     |R(3)    |R(3) |     | 
+   |  4		   |     |Aceptar |     | 		|   
 
-Esta tabla completa muestra el proceso del parser SLR para analizar la entrada `[[][]]` hasta su aceptación final.
-     
+
+   Tabla Parsing:
+
+| Pila     | Entrada   | Acción                    |
+|----------|-----------|---------------------------|
+| 0        | `[[][]]$` | D(1) (Desplazar `[`)      |
+| 0 1      | `[][]]$`  | D(1) (Desplazar `[`)      |
+| 0 1 1    | `[]]$`    | D(1) (Desplazar `[`)      |
+| 0 1 1 1  | `]]$`     | R(2) (Reducir `S → []`)   |
+| 0 1 2    | `]]$`     | R(2) (Reducir `S → [S]`)  |
+| 0 2      | `]$`      | D(3) (Desplazar `]`)      |
+| 0 2 3    | `$`       | R(3) (Reducir `S → SS`)   |
+| 0        | `$`       | Accept                    |
+
+ ```plain
+Aqui un ejemplo de la clase guía:
+
+   Tabla Parser la armo mediante la tabla anterior.
+   En la pila siempre vas agregando/apilando a la derecha un dato este dato lo sacas de la primera tabla
+   ![alt text](image.png)
+   Aqui estoy yendo a buscar a la tabla 0 de la pila y luego el primer id de la entrada, esto lo voy a buscar a la otra tabla, una vez que identifico esa columna y veo que hace o a que R llama.
+
+   ![alt text](image-1.png)
+   Como podemos ver en la otra tabla 0 en la columna id tiene D(5). Entonces debo agregar el 5 a la proxima linea:
+   ![alt text](image-2.png)
+   apilo ese 5 en la segunda fila y elimino el id de la izquierda que ya use en la columna de la Entrada.
+
+   Ahora tengo que desapilar un simbolo de la pila, es decir el último que es el 5.
+   Entonces escribo solo el 0 y tomo de la columna anterior de la accion GOTO el numero que se deriva, es decir 0 de la pila y F  de la accion GOTO seria 0f lo que voy a ir a buscar ahora a la otra tabla.
+   ![alt text](image-3.png)
+   ![alt text](image-4.png)
+
+    Ahora voy a buscar el 3 que ingrese en la pila y el primer "+"  de la columna
+    ![alt text](image-5.png)
+    Ubico 3+ = R4
+    ![alt text](image-6.png)
+    R4 ES ESTA PRODUCCION ![alt text](image-7.png)
+    Entonces desapilo 1 simbolo..
+    Sigo este orden hasta que obtengo 1$ que me da el accept.
+    ![alt text](image-8.png)
