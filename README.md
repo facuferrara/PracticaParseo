@@ -119,9 +119,9 @@
 | 0 2 3    | `$`       | R(3) (Reducir `S → SS`)   |
 | 0        | `$`       | Accept                    |
 
- ```plain
+ ```
 Aqui un ejemplo de la clase guía:
-
+```
    Tabla Parser la armo mediante la tabla anterior.
    En la pila siempre vas agregando/apilando a la derecha un dato este dato lo sacas de la primera tabla
    ![alt text](image.png)
